@@ -8,3 +8,13 @@ C:\Users\ACER-PC\source\repos\MyApp\MyApp\obj\Debug\MyApp.csproj.GenerateResourc
 C:\Users\ACER-PC\source\repos\MyApp\MyApp\obj\Debug\MyApp.csproj.CoreCompileInputs.cache
 C:\Users\ACER-PC\source\repos\MyApp\MyApp\obj\Debug\MyApp.exe
 C:\Users\ACER-PC\source\repos\MyApp\MyApp\obj\Debug\MyApp.pdb
+C:\Users\ACER-PC\source\repos\MyApp\MyAppTest\MyApp\bin\Debug\MyApp.exe.config
+C:\Users\ACER-PC\source\repos\MyApp\MyAppTest\MyApp\bin\Debug\MyApp.exe
+C:\Users\ACER-PC\source\repos\MyApp\MyAppTest\MyApp\bin\Debug\MyApp.pdb
+C:\Users\ACER-PC\source\repos\MyApp\MyAppTest\MyApp\obj\Debug\MyApp.csprojAssemblyReference.cache
+C:\Users\ACER-PC\source\repos\MyApp\MyAppTest\MyApp\obj\Debug\MyApp.Properties.Resources.resources
+C:\Users\ACER-PC\source\repos\MyApp\MyAppTest\MyApp\obj\Debug\MyApp.csproj.GenerateResource.cache
+C:\Users\ACER-PC\source\repos\MyApp\MyAppTest\MyApp\obj\Debug\MyApp.csproj.CoreCompileInputs.cache
+C:\Users\ACER-PC\source\repos\MyApp\MyAppTest\MyApp\obj\Debug\MyApp.exe
+C:\Users\ACER-PC\source\repos\MyApp\MyAppTest\MyApp\obj\Debug\MyApp.pdb
+C:\Users\ACER-PC\source\repos\MyApp\MyAppTest\MyApp\obj\Debug\MyApp.MainForm.resources

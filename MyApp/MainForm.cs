@@ -1,40 +1,55 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MyApp
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        bool addDollars = false;
-        String frontNumber = null, backNumber = null;
-        
-        public Form1()
+        private bool addDollars = false;
+        private String frontNumber = null, backNumber = null;
+
+        public MainForm()
         {
             InitializeComponent();
         }
 
         private void btnConvert_Click(object sender, EventArgs e)
         {
+            txbResult.Text = "";
+            
             // remove leading zero
-            txbResult.Text = ParseWholeNumber(txbNumber.Text.TrimStart(new Char[] { '0' }));
+            ParseWholeNumber(txbNumber.Text.TrimStart(new Char[] { '0' }));
+            
+        }
+        private void ParseWholeNumber(string str)
+        {
+            string word = null;
+            // normalize format
+            NormalizeNumber(str);
+
+            if (InputIsValid())
+            {
+                word = ParseDollar(frontNumber);
+                word += ParseCent(backNumber);
+                txbResult.Text = word;
+            }
+            
         }
 
-        String ParseWholeNumber(string str)
+        private bool InputIsValid()
         {
-            String word = null, tmpString=null;
-            int charsCount = 0;
-            int index = 0;
-            int blockCount = 0;
-            int firstBlockLength = 0;
+            bool result = true;
+            if (txbNumber.Text.Count() > 63)
+            {
+                txbResult.Text = "Numbers Out Of Range";
+                result = false;
+            }
+            return result;
+        }
 
-            // normalize format
+        private void NormalizeNumber(String str)
+        {
             if (str.Contains('.'))
             {
                 frontNumber = str.Split('.')[0];
@@ -50,11 +65,18 @@ namespace MyApp
                 frontNumber = str;
                 backNumber = "00";
             }
-
+        }
+        
+        private String ParseDollar(String str)
+        {
+            String word = null, tmpString = null;
+            int index = 0;
+            int blockCount = 0;
+            int firstBlockLength = 0;
             // blockCount is all number divided by 3 number eg. 10,000 is 1 blocks
-            charsCount = frontNumber.Count();
-            blockCount = charsCount / 3;            
-            
+            int charsCount = frontNumber.Count();
+            blockCount = charsCount / 3;
+
             // get first block length eg. 10000 is 10  equal 2 numbers
             // if result = 0 firstBlockLength is 3 eg. 100000  is 100 equal 3 numbers
             if (charsCount % 3 == 0)
@@ -65,20 +87,18 @@ namespace MyApp
             else
                 firstBlockLength = charsCount % 3;
 
-            // Process Dollars
-            // get numbers in front number with length is firstblockLength
             tmpString = frontNumber.Substring(0, firstBlockLength);
 
             // loop every block
             while (index <= blockCount)
             {
                 // Dont add "DOLLARS" if frontnumber is 0
-                if(frontNumber != "0")
+                if (frontNumber != "0")
                     addDollars = true;
 
                 // Parse Block Number
                 word += ParseBlock(tmpString, blockCount - index);
-                
+
                 // Set Up next Block Number
                 if (index < blockCount)
                 {
@@ -86,56 +106,61 @@ namespace MyApp
                 }
                 index++;
             }
-
-            // Process Cents
-            // value -1 to add word "CENTS" 
-            tmpString = backNumber;
-            word += ParseBlock(tmpString, -1);
             return word;
         }
 
-        String AddShortScaleNumbers(int illion)
+        private String ParseCent(string str)
+        {
+            string word = null;
+            // Process Cents
+            // value -1 to add word "CENTS"
+            word += ParseBlock(str, -1);
+            return word;
+        }
+
+        
+
+        private String AddShortScaleNumbers(int illion)
         {
             String word = null;
             switch (illion)
             {
                 case -1: word = " CENTS "; break;
-                case 0: if(addDollars) word = " DOLLARS "; break;
-                case 1:     word = " THOUSAND, "; break;
-                case 2:     word = " MILLION, "; break;
-                case 3:     word = " BILLION, "; break;
-                case 4:     word = " TRILLION, "; break;
-                case 5:     word = " QUADRILLION, "; break;
-                case 6:     word = " QUINTILLION, "; break;
-                case 7:     word = " SEXTILLION, "; break;
-                case 8:     word = " SEPTILLION, "; break;
-                case 9:     word = " OCTILLION, "; break;
-                case 10:    word = " NONILLION, "; break;
-                case 11:    word = " DECIILLION, "; break;
-                case 12:    word = " UNDECILLION, "; break;
-                case 13:    word = " DUODECILLION, "; break;
-                case 14:    word = " TREDECILLION, "; break;
-                case 15:    word = " QUATTUORDECILLION, "; break;
-                case 16:    word = " QUINDECILLION, "; break;
-                case 17:    word = " SEXDECILLION, "; break;
-                case 18:    word = " SEPTDECILLION, "; break;
-                case 19:    word = " OCTODECILLION, "; break;
-                case 20:    word = " NOVEMDECILLION, "; break;
-                case 21:    word = " VIGINTILLION, "; break;
+                case 0: if (addDollars) word = " DOLLARS "; break;
+                case 1: word = " THOUSAND, "; break;
+                case 2: word = " MILLION, "; break;
+                case 3: word = " BILLION, "; break;
+                case 4: word = " TRILLION, "; break;
+                case 5: word = " QUADRILLION, "; break;
+                case 6: word = " QUINTILLION, "; break;
+                case 7: word = " SEXTILLION, "; break;
+                case 8: word = " SEPTILLION, "; break;
+                case 9: word = " OCTILLION, "; break;
+                case 10: word = " NONILLION, "; break;
+                case 11: word = " DECIILLION, "; break;
+                case 12: word = " UNDECILLION, "; break;
+                case 13: word = " DUODECILLION, "; break;
+                case 14: word = " TREDECILLION, "; break;
+                case 15: word = " QUATTUORDECILLION, "; break;
+                case 16: word = " QUINDECILLION, "; break;
+                case 17: word = " SEXDECILLION, "; break;
+                case 18: word = " SEPTDECILLION, "; break;
+                case 19: word = " OCTODECILLION, "; break;
+                case 20: word = " NOVEMDECILLION, "; break;
+                case 21: word = " VIGINTILLION, "; break;
             }
             //word += Environment.NewLine;
             return word;
         }
 
-        // Parse Block Number 
-        String ParseBlock(string str, int shortScaleNumber)
+        // Parse Block Number
+        private String ParseBlock(string str, int shortScaleNumber)
         {
             string word = null;
             // Parse Hundred first
             if (str.Count() == 3)
             {
                 word = ParseHundred(str.Substring(0, 1));
-                
 
                 if (str.Substring(1, 2) != "00")
                 {
@@ -146,11 +171,11 @@ namespace MyApp
                     if (str.Substring(1, 1) == "1")
                         word += ParseTeen(str.Substring(1, 2));
                     else if (str.Substring(1, 1) == "0")
-                        word += ParseOne(str.Substring(2, 1));
+                        word += ParseOnes(str.Substring(2, 1));
                     else
                     {
                         word += ParseTens(str.Substring(1, 1));
-                        word += ParseOne(str.Substring(2, 1));
+                        word += ParseOnes(str.Substring(2, 1));
                     }
                 }
             }
@@ -158,23 +183,23 @@ namespace MyApp
             {
                 if (str.Substring(0, 2) != "00")
                 {
-                    if (shortScaleNumber == -1 && frontNumber != "0" )
+                    if (shortScaleNumber == -1 && frontNumber != "0")
                         word += " AND ";
 
                     if (str.Substring(0, 1) == "0")
-                        word += ParseOne(str.Substring(1, 1));
+                        word += ParseOnes(str.Substring(1, 1));
                     else if (str.Substring(0, 1) == "1")
                         word += ParseTeen(str.Substring(0, 2));
                     else
                     {
                         word += ParseTens(str.Substring(0, 1));
-                        word += ParseOne(str.Substring(1, 1));
+                        word += ParseOnes(str.Substring(1, 1));
                     }
                 }
             }
             else if (str.Count() == 1)
             {
-                word += ParseOne(str);
+                word += ParseOnes(str);
             }
 
             // Assign Dollar, Dollars, Cent or Cents
@@ -191,20 +216,20 @@ namespace MyApp
             return word;
         }
 
-        String ParseHundred(string str)
+        private String ParseHundred(string str)
         {
             int numb = Convert.ToInt32(str);
             String word = null;
             if (numb > 0)
-                word = ParseOne(str) + " HUNDRED";
-            return word ;
+                word = ParseOnes(str) + " HUNDRED";
+            return word;
         }
 
-        String ParseOne(string str)
+        private String ParseOnes(string str)
         {
             int numb = Convert.ToInt32(str);
             String word = null;
-            switch(numb)
+            switch (numb)
             {
                 case 1:
                     word = "ONE"; break;
@@ -228,7 +253,8 @@ namespace MyApp
 
             return word;
         }
-        String ParseTeen(String str)
+
+        private String ParseTeen(String str)
         {
             int numb = Convert.ToInt32(str);
             String word = null;
@@ -258,12 +284,11 @@ namespace MyApp
             return word;
         }
 
-
-        String ParseTens(String str)
+        private String ParseTens(String str)
         {
             int numb = Convert.ToInt32(str);
             String word = null;
-            switch(numb)
+            switch (numb)
             {
                 case 2:
                     word = "TWENTY-"; break;
@@ -295,11 +320,10 @@ namespace MyApp
             }
 
             // only allow one decimal point
-            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1)) 
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
             {
                 e.Handled = true;
             }
         }
-        
     }
 }
